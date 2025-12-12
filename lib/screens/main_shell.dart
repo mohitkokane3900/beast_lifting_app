@@ -1,30 +1,55 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'feed/feed_screen.dart';
+import 'challenges/challenges_screen.dart';
+import 'progress/progress_screen.dart';
+import 'profile/profile_screen.dart';
 
-class MainShell extends StatelessWidget {
+class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
   @override
+  State<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends State<MainShell> {
+  int index = 0;
+
+  @override
   Widget build(BuildContext context) {
-    final auth = AuthService();
+    final screens = [
+      const FeedScreen(),
+      const ChallengesScreen(),
+      const ProgressScreen(),
+      const ProfileScreen(),
+    ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Beast Mode'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await auth.signOut();
-            },
-            icon: const Icon(Icons.logout),
+      body: screens[index],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        onTap: (i) {
+          setState(() {
+            index = i;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dynamic_feed),
+            label: 'Feed',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.flag),
+            label: 'Challenges',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Progress',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
-      ),
-      body: const Center(
-        child: Text(
-          'Main App Shell',
-          style: TextStyle(fontSize: 20),
-        ),
       ),
     );
   }

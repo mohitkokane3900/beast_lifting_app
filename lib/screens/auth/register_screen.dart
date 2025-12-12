@@ -85,7 +85,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   .map((g) => DropdownMenuItem(value: g, child: Text(g)))
                   .toList(),
               onChanged: (v) {
-                if (v != null) setState(() => goal = v);
+                if (v == null) return;
+                setState(() {
+                  goal = v;
+                });
               },
               decoration: const InputDecoration(labelText: 'Fitness goal'),
             ),
