@@ -14,6 +14,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final emailCtl = TextEditingController();
   final passCtl = TextEditingController();
   final confirmCtl = TextEditingController();
+  String goal = 'Lose Fat';
   String errorText = '';
   bool loading = false;
 
@@ -28,14 +29,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       loading = true;
       errorText = '';
     });
-    final msg = await auth.register(
+    final e = await auth.register(
       name: nameCtl.text.trim(),
       email: emailCtl.text.trim(),
       password: passCtl.text.trim(),
     );
-    if (msg != null) {
+    if (e != null) {
       setState(() {
-        errorText = msg;
+        errorText = e;
       });
     } else {
       Navigator.pop(context);
@@ -47,11 +48,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final goals = ['Lose Fat', 'Gain Muscle', 'Stay Active'];
+
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: nameCtl,
@@ -72,16 +76,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextField(
               controller: confirmCtl,
               obscureText: true,
-              decoration: const InputDecoration(labelText: 'Confirm Password'),
+              decoration: const InputDecoration(labelText: 'Confirm password'),
             ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              value: goal,
+              items: goals
+                  .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                  .toList(),
+              onChanged: (v) {
+                if (v != null) setState(() => goal = v);
+              },
+              decoration: const InputDecoration(labelText: 'Fitness goal'),
+            ),
+            const SizedBox(height: 8),
             if (errorText.isNotEmpty)
               Text(errorText, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: loading ? null : _doRegister,
-              child: loading
-                  ? const CircularProgressIndicator()
-                  : const Text('Create Account'),
+            SizedBox(
+              height: 48,
+              child: ElevatedButton(
+                onPressed: loading ? null : _doRegister,
+                child: loading
+                    ? const CircularProgressIndicator()
+                    : const Text('Create Account'),
+              ),
             ),
           ],
         ),

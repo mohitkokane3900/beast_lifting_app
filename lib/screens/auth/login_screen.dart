@@ -21,10 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
       loading = true;
       errorText = '';
     });
-    final msg = await auth.signIn(emailCtl.text.trim(), passCtl.text.trim());
-    if (msg != null) {
+    final e = await auth.signIn(emailCtl.text.trim(), passCtl.text.trim());
+    if (e != null) {
       setState(() {
-        errorText = msg;
+        errorText = e;
       });
     }
     setState(() {
@@ -42,11 +42,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Beast Mode')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const SizedBox(height: 24),
+            const Text(
+              'Beast Mode',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 24),
             TextField(
               controller: emailCtl,
               decoration: const InputDecoration(labelText: 'Email'),
@@ -57,18 +65,23 @@ class _LoginScreenState extends State<LoginScreen> {
               obscureText: true,
               decoration: const InputDecoration(labelText: 'Password'),
             ),
+            const SizedBox(height: 8),
             if (errorText.isNotEmpty)
               Text(errorText, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: loading ? null : _doLogin,
-              child: loading
-                  ? const CircularProgressIndicator()
-                  : const Text('Login'),
+            SizedBox(
+              height: 48,
+              child: ElevatedButton(
+                onPressed: loading ? null : _doLogin,
+                child: loading
+                    ? const CircularProgressIndicator()
+                    : const Text('Login'),
+              ),
             ),
+            const SizedBox(height: 16),
             TextButton(
               onPressed: _goRegister,
-              child: const Text('Create Account'),
+              child: const Text('Create account'),
             ),
           ],
         ),
