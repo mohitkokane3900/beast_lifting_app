@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/app_user.dart';
+import '../models/feed_post.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -20,5 +21,15 @@ class FirestoreService {
     final snap = await _db.collection('users').doc(uid).get();
     if (!snap.exists) return null;
     return AppUser.fromMap(snap.data()!);
+  }
+
+  Stream<List<FeedPost>> feedStream() {
+    return _db
+        .collection('activity_feed')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (qs) => qs.docs.map((d) => FeedPost.fromMap(d.id, d.data())).toList(),
+        );
   }
 }
