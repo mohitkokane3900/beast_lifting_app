@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../services/firestore_service.dart';
 import '../../models/workout.dart';
 
 class NewWorkoutScreen extends StatefulWidget {
@@ -11,9 +12,11 @@ class NewWorkoutScreen extends StatefulWidget {
 }
 
 class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
+  final store = FirestoreService();
   final titleCtl = TextEditingController();
   final List<_ExerciseBlock> blocks = [];
   late DateTime createdAt;
+  bool saving = false;
 
   @override
   void initState() {
@@ -28,7 +31,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     });
   }
 
-  void _saveWorkout({required bool share}) {
+  Future<void> _saveWorkout({required bool share}) async {
     if (titleCtl.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Enter workout title')),
@@ -52,15 +55,35 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          share
-              ? 'Saving + sharing (next commit)'
-              : 'Saving private (next commit)',
-        ),
-      ),
+    setState(() {
+      saving = true;
+    });
+
+    final workout = Workout(
+      id: '',
+      userId: widget.userId,
+      title: titleCtl.text.trim(),
+      createdAt: createdAt,
+      exercises: exercises,
+      linkedChallengeIds: [],
     );
+
+    final id = await store.saveWorkout(workout);
+
+    if (share) {
+      await store.addWorkoutFeedPost(
+        userId: widget.userId,
+        workoutId: id,
+        text: '${titleCtl.text.trim()} • ${exercises.length} exercises',
+      );
+    }
+
+    setState(() {
+      saving = false;
+    });
+
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   @override
@@ -99,11 +122,11 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
             _wideButton(
               text: 'Save & Share to Feed',
               color: Colors.green,
-              onTap: () => _saveWorkout(share: true),
+              onTap: saving ? null : () => _saveWorkout(share: true),
             ),
             const SizedBox(height: 8),
             TextButton(
-              onPressed: () => _saveWorkout(share: false),
+              onPressed: saving ? null : () => _saveWorkout(share: false),
               child: const Text('Save Private'),
             ),
           ],
@@ -185,7 +208,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
   Widget _wideButton({
     required String text,
     required Color color,
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
   }) {
     return SizedBox(
       width: double.infinity,

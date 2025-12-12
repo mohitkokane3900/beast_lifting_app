@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/app_user.dart';
 import '../models/feed_post.dart';
+import '../models/workout.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -28,8 +29,30 @@ class FirestoreService {
         .collection('activity_feed')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map(
-          (qs) => qs.docs.map((d) => FeedPost.fromMap(d.id, d.data())).toList(),
-        );
+        .map((qs) =>
+            qs.docs.map((d) => FeedPost.fromMap(d.id, d.data())).toList());
+  }
+
+  Future<String> saveWorkout(Workout workout) async {
+    final doc = _db.collection('workouts').doc();
+    await doc.set(workout.toMap());
+    return doc.id;
+  }
+
+  Future<void> addWorkoutFeedPost({
+    required String userId,
+    required String workoutId,
+    required String text,
+  }) async {
+    await _db.collection('activity_feed').add({
+      'userId': userId,
+      'type': 'workout',
+      'workoutId': workoutId,
+      'challengeId': null,
+      'text': text,
+      'createdAt': DateTime.now().toIso8601String(),
+      'visibility': 'public',
+      'reactionsCount': {},
+    });
   }
 }
