@@ -76,4 +76,15 @@ class FirestoreService {
       'streakDays': 0,
     }, SetOptions(merge: true));
   }
+
+  Stream<List<Workout>> workoutsForUser(String uid) {
+    return _db
+        .collection('workouts')
+        .where('userId', isEqualTo: uid)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (qs) => qs.docs.map((d) => Workout.fromMap(d.id, d.data())).toList(),
+        );
+  }
 }
