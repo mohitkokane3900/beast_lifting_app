@@ -3,6 +3,7 @@ import '../models/app_user.dart';
 import '../models/feed_post.dart';
 import '../models/workout.dart';
 import '../models/challenge.dart';
+import '../models/photo_entry.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -83,8 +84,17 @@ class FirestoreService {
         .where('userId', isEqualTo: uid)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map(
-          (qs) => qs.docs.map((d) => Workout.fromMap(d.id, d.data())).toList(),
-        );
+        .map((qs) =>
+            qs.docs.map((d) => Workout.fromMap(d.id, d.data())).toList());
+  }
+
+  Stream<List<PhotoEntry>> photoEntriesForUser(String uid) {
+    return _db
+        .collection('photos')
+        .where('userId', isEqualTo: uid)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((qs) =>
+            qs.docs.map((d) => PhotoEntry.fromMap(d.id, d.data())).toList());
   }
 }

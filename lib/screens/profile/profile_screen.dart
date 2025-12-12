@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../../services/firestore_service.dart';
 import '../../models/app_user.dart';
+import '../photos/photo_journal_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,7 +14,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final auth = AuthService();
   final store = FirestoreService();
-
   AppUser? user;
   bool loading = true;
 
@@ -43,28 +43,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (user == null) {
       return const Scaffold(
-        body: Center(child: Text('No profile found')),
+        body: Center(child: Text('No profile')),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await auth.signOut();
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Profile')),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const CircleAvatar(radius: 36, child: Icon(Icons.person)),
-            const SizedBox(height: 12),
+            const CircleAvatar(
+              radius: 36,
+              child: Icon(Icons.person, size: 36),
+            ),
+            const SizedBox(height: 8),
             Text(
               user!.name,
               style: const TextStyle(
@@ -74,6 +67,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 4),
             Text(user!.email),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PhotoJournalScreen(),
+                    ),
+                  );
+                },
+                child: const Text('View Photo Journal'),
+              ),
+            ),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: TextButton(
+                onPressed: () async {
+                  await auth.signOut();
+                },
+                child: const Text('Logout'),
+              ),
+            ),
           ],
         ),
       ),
