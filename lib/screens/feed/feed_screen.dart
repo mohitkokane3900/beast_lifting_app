@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../services/firestore_service.dart';
+import '../../services/auth_service.dart';
 import '../../models/feed_post.dart';
+import '../workouts/new_workout_screen.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -12,6 +14,7 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final store = FirestoreService();
+  final auth = AuthService();
   String filter = 'All';
 
   @override
@@ -69,7 +72,16 @@ class _FeedScreenState extends State<FeedScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          final u = auth.currentUser;
+          if (u == null) return;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => NewWorkoutScreen(userId: u.uid),
+            ),
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
@@ -98,6 +110,7 @@ class _FeedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = DateFormat('MMM d, h:mm a');
     final timeLabel = f.format(post.createdAt);
+    final text = post.text.isEmpty ? 'New workout logged' : post.text;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -126,7 +139,7 @@ class _FeedCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Text(post.text),
+            Text(text),
             const SizedBox(height: 8),
             Row(
               children: const [
