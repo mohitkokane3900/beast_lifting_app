@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "373385381410",
+    "project_id": "beast-lifting-app",
+    "storage_bucket": "beast-lifting-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373385381410:android:012550aaf3710ec9306c7b",
+        "android_client_info": {
+          "package_name": "com.example.beast_lifting_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAj2_O-JUH6346FMziKOzJu-ChfJueRDwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
