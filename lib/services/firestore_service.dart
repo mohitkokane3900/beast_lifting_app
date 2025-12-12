@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/app_user.dart';
 import '../models/feed_post.dart';
 import '../models/workout.dart';
+import '../models/challenge.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -54,5 +55,12 @@ class FirestoreService {
       'visibility': 'public',
       'reactionsCount': {},
     });
+  }
+
+  Stream<List<Challenge>> challengesStream() {
+    return _db.collection('challenges').orderBy('title').snapshots().map(
+          (qs) =>
+              qs.docs.map((d) => Challenge.fromMap(d.id, d.data())).toList(),
+        );
   }
 }
