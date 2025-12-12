@@ -59,8 +59,21 @@ class FirestoreService {
 
   Stream<List<Challenge>> challengesStream() {
     return _db.collection('challenges').orderBy('title').snapshots().map(
-          (qs) =>
-              qs.docs.map((d) => Challenge.fromMap(d.id, d.data())).toList(),
-        );
+        (qs) => qs.docs.map((d) => Challenge.fromMap(d.id, d.data())).toList());
+  }
+
+  Future<void> joinChallenge(String challengeId, String uid) async {
+    final ref = _db
+        .collection('challenges')
+        .doc(challengeId)
+        .collection('participants')
+        .doc(uid);
+
+    await ref.set({
+      'userId': uid,
+      'joinedAt': DateTime.now().toIso8601String(),
+      'completedWorkoutsCount': 0,
+      'streakDays': 0,
+    }, SetOptions(merge: true));
   }
 }

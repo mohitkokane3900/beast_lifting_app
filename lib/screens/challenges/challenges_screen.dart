@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/firestore_service.dart';
 import '../../models/challenge.dart';
+import 'challenge_detail_screen.dart';
 
 class ChallengesScreen extends StatelessWidget {
   const ChallengesScreen({super.key});
@@ -35,9 +36,10 @@ class ChallengesScreen extends StatelessWidget {
                   subtitle: Text(c.description),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Open ${c.title} details next'),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ChallengeDetailScreen(challenge: c),
                       ),
                     );
                   },
