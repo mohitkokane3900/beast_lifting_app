@@ -38,14 +38,12 @@ class _AuthGateState extends State<AuthGate> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-
         if (snap.data == null) {
           return LoginScreen(
             darkMode: widget.darkMode,
             onThemeChanged: widget.onThemeChanged,
           );
         }
-
         return MainShell(
           darkMode: widget.darkMode,
           onThemeChanged: widget.onThemeChanged,

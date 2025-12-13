@@ -44,17 +44,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-
     if (user == null) {
-      return const Scaffold(
-        body: Center(child: Text('No profile')),
-      );
+      return const Scaffold(body: Center(child: Text('No profile')));
     }
-
     final u = user!;
 
     return Scaffold(
@@ -65,9 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () {
               widget.onThemeChanged(!widget.darkMode);
             },
-            icon: Icon(
-              widget.darkMode ? Icons.dark_mode : Icons.light_mode,
-            ),
+            icon: Icon(widget.darkMode ? Icons.dark_mode : Icons.light_mode),
           ),
         ],
       ),
@@ -75,17 +67,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 36,
-              child: Icon(Icons.person, size: 36),
-            ),
+            const CircleAvatar(radius: 36, child: Icon(Icons.person, size: 36)),
             const SizedBox(height: 8),
             Text(
               u.name,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 4),
             Chip(label: Text(u.fitnessGoal)),
@@ -136,9 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => SettingsScreen(user: u),
-                    ),
+                    MaterialPageRoute(builder: (_) => SettingsScreen(user: u)),
                   );
                 },
                 child: const Text('Settings & Privacy'),

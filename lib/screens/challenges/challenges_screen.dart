@@ -3,13 +3,18 @@ import '../../services/firestore_service.dart';
 import '../../models/challenge.dart';
 import 'challenge_detail_screen.dart';
 
-class ChallengesScreen extends StatelessWidget {
+class ChallengesScreen extends StatefulWidget {
   const ChallengesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final store = FirestoreService();
+  State<ChallengesScreen> createState() => _ChallengesScreenState();
+}
 
+class _ChallengesScreenState extends State<ChallengesScreen> {
+  final store = FirestoreService();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Challenges')),
       body: StreamBuilder<List<Challenge>>(
@@ -18,12 +23,10 @@ class ChallengesScreen extends StatelessWidget {
           if (!snap.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-
           final list = snap.data!;
           if (list.isEmpty) {
             return const Center(child: Text('No challenges yet'));
           }
-
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: list.length,
@@ -48,6 +51,17 @@ class ChallengesScreen extends StatelessWidget {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Create Challenge is optional for later'),
+            ),
+          );
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Create Challenge'),
       ),
     );
   }

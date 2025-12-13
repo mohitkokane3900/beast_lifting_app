@@ -5,10 +5,7 @@ class WorkoutSet {
   WorkoutSet({required this.weight, required this.reps});
 
   Map<String, dynamic> toMap() {
-    return {
-      'weight': weight,
-      'reps': reps,
-    };
+    return {'weight': weight, 'reps': reps};
   }
 
   factory WorkoutSet.fromMap(Map<String, dynamic> m) {
@@ -26,10 +23,7 @@ class WorkoutExercise {
   WorkoutExercise({required this.name, required this.sets});
 
   Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'sets': sets.map((s) => s.toMap()).toList(),
-    };
+    return {'name': name, 'sets': sets.map((s) => s.toMap()).toList()};
   }
 
   factory WorkoutExercise.fromMap(Map<String, dynamic> m) {

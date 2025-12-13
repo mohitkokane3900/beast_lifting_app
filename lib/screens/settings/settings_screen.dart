@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/app_user.dart';
 import '../../services/firestore_service.dart';
+import '../../services/auth_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final AppUser user;
@@ -12,6 +13,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final store = FirestoreService();
+  final auth = AuthService();
 
   late bool showWorkouts;
   late bool showPhotos;
@@ -33,9 +35,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       blurFace: blurFace,
     );
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Settings saved')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Settings saved')));
   }
 
   @override
@@ -49,17 +51,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SwitchListTile(
               title: const Text('Show workouts in public feed'),
               value: showWorkouts,
-              onChanged: (v) => setState(() => showWorkouts = v),
+              onChanged: (v) {
+                setState(() {
+                  showWorkouts = v;
+                });
+              },
             ),
             SwitchListTile(
               title: const Text('Show photos to friends'),
               value: showPhotos,
-              onChanged: (v) => setState(() => showPhotos = v),
+              onChanged: (v) {
+                setState(() {
+                  showPhotos = v;
+                });
+              },
             ),
             SwitchListTile(
               title: const Text('Blur face in photo previews'),
               value: blurFace,
-              onChanged: (v) => setState(() => blurFace = v),
+              onChanged: (v) {
+                setState(() {
+                  blurFace = v;
+                });
+              },
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -68,6 +82,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: ElevatedButton(
                 onPressed: _save,
                 child: const Text('Save Settings'),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Delete account would remove data; not implemented',
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Delete account',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ),
           ],

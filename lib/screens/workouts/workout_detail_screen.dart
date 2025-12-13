@@ -11,10 +11,8 @@ class WorkoutDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final f = DateFormat('EEE MMM d, h:mm a');
     final date = f.format(workout.createdAt);
-
     int totalSets = 0;
     double totalVolume = 0;
-
     for (final ex in workout.exercises) {
       for (final s in ex.sets) {
         totalSets += 1;
@@ -31,10 +29,7 @@ class WorkoutDetailScreen extends StatelessWidget {
           children: [
             Text(
               workout.title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 4),
             Text(date),
@@ -62,9 +57,7 @@ class WorkoutDetailScreen extends StatelessWidget {
                         children: [
                           Text(
                             ex.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 8),
                           Column(

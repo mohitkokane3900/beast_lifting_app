@@ -32,26 +32,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
       return;
     }
-
     setState(() {
       busy = true;
       errorText = '';
     });
-
     final e = await auth.register(
       name: nameCtl.text.trim(),
       email: emailCtl.text.trim(),
       password: passCtl.text.trim(),
       fitnessGoal: goal,
     );
-
     setState(() {
       busy = false;
       errorText = e ?? '';
     });
-
     if (e == null) {
-      if (!mounted) return;
       Navigator.pop(context);
     }
   }
@@ -112,10 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             const SizedBox(height: 8),
             if (errorText.isNotEmpty)
-              Text(
-                errorText,
-                style: const TextStyle(color: Colors.red),
-              ),
+              Text(errorText, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 16),
             SizedBox(
               height: 48,

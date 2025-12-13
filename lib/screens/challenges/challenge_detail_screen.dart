@@ -19,27 +19,22 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
   Future<void> _join() async {
     final u = auth.currentUser;
     if (u == null) return;
-
     setState(() {
       joining = true;
     });
-
     await store.joinChallenge(widget.challenge.id, u.uid);
-
     setState(() {
       joining = false;
     });
-
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Joined challenge')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Joined challenge')));
   }
 
   @override
   Widget build(BuildContext context) {
     final c = widget.challenge;
-
     return Scaffold(
       appBar: AppBar(title: Text(c.title)),
       body: Padding(
@@ -47,10 +42,7 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              c.description,
-              style: const TextStyle(fontSize: 16),
-            ),
+            Text(c.description, style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 12),
             Text('Duration: ${c.durationDays} days'),
             const SizedBox(height: 12),

@@ -6,15 +6,12 @@ import 'screens/auth/auth_gate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const BeastAppRoot());
 }
 
 class BeastAppRoot extends StatefulWidget {
   const BeastAppRoot({super.key});
-
   @override
   State<BeastAppRoot> createState() => _BeastAppRootState();
 }
@@ -51,17 +48,13 @@ class _BeastAppRootState extends State<BeastAppRoot> {
     if (!loaded) {
       return MaterialApp(home: Container(color: Colors.black));
     }
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Beast Mode',
       theme: ThemeData.light(useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-      home: AuthGate(
-        darkMode: isDark,
-        onThemeChanged: _setTheme,
-      ),
+      home: AuthGate(darkMode: isDark, onThemeChanged: _setTheme),
     );
   }
 }

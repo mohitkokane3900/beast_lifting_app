@@ -47,18 +47,12 @@ class _MainShellState extends State<MainShell> {
             icon: Icon(Icons.dynamic_feed),
             label: 'Feed',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flag),
-            label: 'Challenges',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.flag), label: 'Challenges'),
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),
             label: 'Progress',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );

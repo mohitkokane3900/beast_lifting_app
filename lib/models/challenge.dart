@@ -26,8 +26,9 @@ class Challenge {
       startDate: m['startDate'] != null
           ? DateTime.parse(m['startDate'] as String)
           : null,
-      endDate:
-          m['endDate'] != null ? DateTime.parse(m['endDate'] as String) : null,
+      endDate: m['endDate'] != null
+          ? DateTime.parse(m['endDate'] as String)
+          : null,
       isActive: m['isActive'] as bool? ?? true,
     );
   }

@@ -14,7 +14,8 @@ class FirestoreService {
     required String email,
     required String fitnessGoal,
   }) async {
-    await _db.collection('users').doc(uid).set({
+    final doc = _db.collection('users').doc(uid);
+    await doc.set({
       'uid': uid,
       'name': name,
       'email': email,
@@ -50,19 +51,20 @@ class FirestoreService {
     });
   }
 
+  Future<String> saveWorkout(Workout workout) async {
+    final doc = _db.collection('workouts').doc();
+    await doc.set(workout.toMap());
+    return doc.id;
+  }
+
   Stream<List<FeedPost>> feedStream() {
     return _db
         .collection('activity_feed')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((qs) =>
-            qs.docs.map((d) => FeedPost.fromMap(d.id, d.data())).toList());
-  }
-
-  Future<String> saveWorkout(Workout workout) async {
-    final doc = _db.collection('workouts').doc();
-    await doc.set(workout.toMap());
-    return doc.id;
+        .map(
+          (qs) => qs.docs.map((d) => FeedPost.fromMap(d.id, d.data())).toList(),
+        );
   }
 
   Future<void> addWorkoutFeedPost({
@@ -88,22 +90,29 @@ class FirestoreService {
         .where('userId', isEqualTo: uid)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((qs) =>
-            qs.docs.map((d) => Workout.fromMap(d.id, d.data())).toList());
+        .map(
+          (qs) => qs.docs.map((d) => Workout.fromMap(d.id, d.data())).toList(),
+        );
   }
 
   Stream<List<Challenge>> challengesStream() {
-    return _db.collection('challenges').orderBy('title').snapshots().map(
-        (qs) => qs.docs.map((d) => Challenge.fromMap(d.id, d.data())).toList());
+    return _db
+        .collection('challenges')
+        .orderBy('title')
+        .snapshots()
+        .map(
+          (qs) =>
+              qs.docs.map((d) => Challenge.fromMap(d.id, d.data())).toList(),
+        );
   }
 
   Future<void> joinChallenge(String challengeId, String uid) async {
-    await _db
+    final ref = _db
         .collection('challenges')
         .doc(challengeId)
         .collection('participants')
-        .doc(uid)
-        .set({
+        .doc(uid);
+    await ref.set({
       'userId': uid,
       'joinedAt': DateTime.now().toIso8601String(),
       'completedWorkoutsCount': 0,
@@ -117,26 +126,9 @@ class FirestoreService {
         .where('userId', isEqualTo: uid)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((qs) =>
-            qs.docs.map((d) => PhotoEntry.fromMap(d.id, d.data())).toList());
-  }
-
-  Future<void> addPhotoEntry({
-    required String userId,
-    required String imageUrl,
-    String? workoutId,
-    String? note,
-    required String visibility,
-    required bool blurred,
-  }) async {
-    await _db.collection('photos').add({
-      'userId': userId,
-      'imageUrl': imageUrl,
-      'workoutId': workoutId,
-      'note': note,
-      'visibility': visibility,
-      'blurred': blurred,
-      'createdAt': DateTime.now().toIso8601String(),
-    });
+        .map(
+          (qs) =>
+              qs.docs.map((d) => PhotoEntry.fromMap(d.id, d.data())).toList(),
+        );
   }
 }

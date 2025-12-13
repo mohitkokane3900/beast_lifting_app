@@ -20,8 +20,9 @@ class FeedPost {
   });
 
   factory FeedPost.fromMap(String id, Map<String, dynamic> m) {
-    final react = (m['reactionsCount'] as Map<String, dynamic>? ?? {})
-        .map((k, v) => MapEntry(k, (v as num).toInt()));
+    final react = (m['reactionsCount'] as Map<String, dynamic>? ?? {}).map(
+      (k, v) => MapEntry(k, (v as num).toInt()),
+    );
 
     return FeedPost(
       id: id,

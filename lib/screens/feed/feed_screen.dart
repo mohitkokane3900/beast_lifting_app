@@ -53,14 +53,12 @@ class _FeedScreenState extends State<FeedScreen> {
                 if (!snap.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
                 final posts = snap.data!;
                 if (posts.isEmpty) {
                   return const Center(
                     child: Text('No activity yet. Log your first workout!'),
                   );
                 }
-
                 return ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: posts.length,
@@ -79,9 +77,7 @@ class _FeedScreenState extends State<FeedScreen> {
           if (u == null) return;
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => NewWorkoutScreen(userId: u.uid),
-            ),
+            MaterialPageRoute(builder: (_) => NewWorkoutScreen(userId: u.uid)),
           );
         },
         child: const Icon(Icons.add),
@@ -115,18 +111,15 @@ class _FeedCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 const CircleAvatar(child: Icon(Icons.person)),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'User ${post.userId.substring(0, 4)}',
@@ -142,18 +135,15 @@ class _FeedCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 15),
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
+            Text(text),
+            const SizedBox(height: 8),
             Row(
               children: const [
                 Icon(Icons.thumb_up_alt_outlined, size: 18),
-                SizedBox(width: 10),
+                SizedBox(width: 8),
                 Icon(Icons.local_fire_department_outlined, size: 18),
-                SizedBox(width: 10),
+                SizedBox(width: 8),
                 Icon(Icons.percent, size: 18),
                 Spacer(),
                 Icon(Icons.mode_comment_outlined, size: 18),

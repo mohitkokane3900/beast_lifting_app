@@ -28,9 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       errorText = '';
       busy = true;
     });
-
     final e = await auth.signIn(emailCtl.text.trim(), passCtl.text.trim());
-
     setState(() {
       busy = false;
       errorText = e ?? '';
@@ -77,10 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 8),
             if (errorText.isNotEmpty)
-              Text(
-                errorText,
-                style: const TextStyle(color: Colors.red),
-              ),
+              Text(errorText, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 16),
             SizedBox(
               height: 48,

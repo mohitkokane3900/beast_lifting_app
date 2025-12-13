@@ -33,9 +33,9 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
 
   Future<void> _saveWorkout({required bool share}) async {
     if (titleCtl.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter workout title')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Enter workout title')));
       return;
     }
 
@@ -43,9 +43,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     for (final b in blocks) {
       final name = b.exerciseCtl.text.trim();
       if (name.isEmpty || b.sets.isEmpty) continue;
-      exercises.add(
-        WorkoutExercise(name: name, sets: List.of(b.sets)),
-      );
+      exercises.add(WorkoutExercise(name: name, sets: List.of(b.sets)));
     }
 
     if (exercises.isEmpty) {
@@ -69,7 +67,6 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
     );
 
     final id = await store.saveWorkout(workout);
-
     if (share) {
       await store.addWorkoutFeedPost(
         userId: widget.userId,
@@ -109,9 +106,7 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Column(
-              children: blocks.map((b) => _buildBlock(b)).toList(),
-            ),
+            Column(children: blocks.map((b) => _buildBlock(b)).toList()),
             const SizedBox(height: 12),
             _wideButton(
               text: '+ Add Exercise',
@@ -196,8 +191,9 @@ class _NewWorkoutScreenState extends State<NewWorkoutScreen> {
             else
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                    b.sets.map((s) => Text('${s.weight} x ${s.reps}')).toList(),
+                children: b.sets
+                    .map((s) => Text('${s.weight} x ${s.reps}'))
+                    .toList(),
               ),
           ],
         ),

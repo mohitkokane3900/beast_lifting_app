@@ -19,9 +19,7 @@ class _PhotoJournalScreenState extends State<PhotoJournalScreen> {
   Widget build(BuildContext context) {
     final u = auth.currentUser;
     if (u == null) {
-      return const Scaffold(
-        body: Center(child: Text('Not logged in')),
-      );
+      return const Scaffold(body: Center(child: Text('Not logged in')));
     }
 
     return Scaffold(
@@ -32,14 +30,11 @@ class _PhotoJournalScreenState extends State<PhotoJournalScreen> {
           if (!snap.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-
           final list = snap.data!;
           if (list.isEmpty) {
             return const Center(child: Text('No photos yet'));
           }
-
           final f = DateFormat('MMM d, y');
-
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: list.length,
@@ -56,9 +51,7 @@ class _PhotoJournalScreenState extends State<PhotoJournalScreen> {
                         children: [
                           Text(
                             f.format(p.createdAt),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 4),
                           Text(p.note ?? 'Workout photo'),
