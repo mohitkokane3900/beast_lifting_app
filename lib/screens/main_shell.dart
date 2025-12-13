@@ -5,7 +5,14 @@ import 'progress/progress_screen.dart';
 import 'profile/profile_screen.dart';
 
 class MainShell extends StatefulWidget {
-  const MainShell({super.key});
+  final bool darkMode;
+  final ValueChanged<bool> onThemeChanged;
+
+  const MainShell({
+    super.key,
+    required this.darkMode,
+    required this.onThemeChanged,
+  });
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -20,7 +27,10 @@ class _MainShellState extends State<MainShell> {
       const FeedScreen(),
       const ChallengesScreen(),
       const ProgressScreen(),
-      const ProfileScreen(),
+      ProfileScreen(
+        darkMode: widget.darkMode,
+        onThemeChanged: widget.onThemeChanged,
+      ),
     ];
 
     return Scaffold(

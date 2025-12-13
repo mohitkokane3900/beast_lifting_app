@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final bool darkMode;
+  final ValueChanged<bool> onThemeChanged;
+
+  const RegisterScreen({
+    super.key,
+    required this.darkMode,
+    required this.onThemeChanged,
+  });
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -16,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmCtl = TextEditingController();
   String goal = 'Lose Fat';
   String errorText = '';
-  bool loading = false;
+  bool busy = false;
 
   Future<void> _doRegister() async {
     if (passCtl.text.trim() != confirmCtl.text.trim()) {
@@ -25,25 +32,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
       return;
     }
+
     setState(() {
-      loading = true;
+      busy = true;
       errorText = '';
     });
+
     final e = await auth.register(
       name: nameCtl.text.trim(),
       email: emailCtl.text.trim(),
       password: passCtl.text.trim(),
+      fitnessGoal: goal,
     );
-    if (e != null) {
-      setState(() {
-        errorText = e;
-      });
-    } else {
+
+    setState(() {
+      busy = false;
+      errorText = e ?? '';
+    });
+
+    if (e == null) {
+      if (!mounted) return;
       Navigator.pop(context);
     }
-    setState(() {
-      loading = false;
-    });
   }
 
   @override
@@ -52,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Create Account')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,14 +103,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
               decoration: const InputDecoration(labelText: 'Fitness goal'),
             ),
             const SizedBox(height: 8),
+            Text(
+              'By continuing you agree to terms…',
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+            const SizedBox(height: 8),
             if (errorText.isNotEmpty)
-              Text(errorText, style: const TextStyle(color: Colors.red)),
+              Text(
+                errorText,
+                style: const TextStyle(color: Colors.red),
+              ),
             const SizedBox(height: 16),
             SizedBox(
               height: 48,
               child: ElevatedButton(
-                onPressed: loading ? null : _doRegister,
-                child: loading
+                onPressed: busy ? null : _doRegister,
+                child: busy
                     ? const CircularProgressIndicator()
                     : const Text('Create Account'),
               ),

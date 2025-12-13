@@ -3,7 +3,14 @@ import '../../services/auth_service.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final bool darkMode;
+  final ValueChanged<bool> onThemeChanged;
+
+  const LoginScreen({
+    super.key,
+    required this.darkMode,
+    required this.onThemeChanged,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -14,28 +21,31 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailCtl = TextEditingController();
   final passCtl = TextEditingController();
   String errorText = '';
-  bool loading = false;
+  bool busy = false;
 
   Future<void> _doLogin() async {
     setState(() {
-      loading = true;
       errorText = '';
+      busy = true;
     });
+
     final e = await auth.signIn(emailCtl.text.trim(), passCtl.text.trim());
-    if (e != null) {
-      setState(() {
-        errorText = e;
-      });
-    }
+
     setState(() {
-      loading = false;
+      busy = false;
+      errorText = e ?? '';
     });
   }
 
   void _goRegister() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+      MaterialPageRoute(
+        builder: (_) => RegisterScreen(
+          darkMode: widget.darkMode,
+          onThemeChanged: widget.onThemeChanged,
+        ),
+      ),
     );
   }
 
@@ -67,13 +77,16 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 8),
             if (errorText.isNotEmpty)
-              Text(errorText, style: const TextStyle(color: Colors.red)),
+              Text(
+                errorText,
+                style: const TextStyle(color: Colors.red),
+              ),
             const SizedBox(height: 16),
             SizedBox(
               height: 48,
               child: ElevatedButton(
-                onPressed: loading ? null : _doLogin,
-                child: loading
+                onPressed: busy ? null : _doLogin,
+                child: busy
                     ? const CircularProgressIndicator()
                     : const Text('Login'),
               ),
@@ -82,6 +95,17 @@ class _LoginScreenState extends State<LoginScreen> {
             TextButton(
               onPressed: _goRegister,
               child: const Text('Create account'),
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Dark Mode'),
+                Switch(
+                  value: widget.darkMode,
+                  onChanged: widget.onThemeChanged,
+                ),
+              ],
             ),
           ],
         ),
